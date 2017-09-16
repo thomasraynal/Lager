@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Xunit;
 
-namespace Lager.Tests
+namespace Lager.Tests.Reactive
 {
-    public class SettingsStorageTest
+    public class ReactiveSettingsStorageTest
     {
+
         [Fact]
         public void GetOrCreateHitsInternalCacheFirst()
         {
             var cache = Substitute.For<IBlobCache>();
-            var settings = new SettingsStorageProxy(cache);
+            var settings = new ReactiveSettingsStorageProxy(cache);
 
             settings.SetOrCreateProxy(42, "TestNumber");
 
@@ -26,7 +27,7 @@ namespace Lager.Tests
         public async Task GetOrCreateInsertsDefaultValueIntoBlobCache()
         {
             var cache = new InMemoryBlobCache();
-            var settings = new SettingsStorageProxy(cache);
+            var settings = new ReactiveSettingsStorageProxy(cache);
 
             settings.GetOrCreateProxy(42, "TestNumber");
 
@@ -36,7 +37,7 @@ namespace Lager.Tests
         [Fact]
         public void GetOrCreateSetsDefaultValueIfNoneExists()
         {
-            var settings = new SettingsStorageProxy();
+            var settings = new ReactiveSettingsStorageProxy();
             settings.GetOrCreateProxy(42, "TestNumber");
 
             Assert.Equal(42, settings.GetOrCreateProxy(20, "TestNumber"));
@@ -45,7 +46,7 @@ namespace Lager.Tests
         [Fact]
         public void GetOrCreateSmokeTest()
         {
-            var settings = new SettingsStorageProxy();
+            var settings = new ReactiveSettingsStorageProxy();
             settings.SetOrCreateProxy(42, "TestNumber");
 
             Assert.Equal(42, settings.GetOrCreateProxy(20, "TestNumber"));
@@ -54,7 +55,7 @@ namespace Lager.Tests
         [Fact]
         public void GetOrCreateWithNullKeyThrowsArgumentNullException()
         {
-            var settings = new SettingsStorageProxy();
+            var settings = new ReactiveSettingsStorageProxy();
 
             Assert.Throws<ArgumentNullException>(() => settings.GetOrCreateProxy(42, null));
         }
@@ -86,7 +87,7 @@ namespace Lager.Tests
         public async Task SetOrCreateInsertsValueIntoBlobCache()
         {
             var cache = new InMemoryBlobCache();
-            var settings = new SettingsStorageProxy(cache);
+            var settings = new ReactiveSettingsStorageProxy(cache);
 
             settings.SetOrCreateProxy(42, "TestNumber");
 
@@ -96,7 +97,7 @@ namespace Lager.Tests
         [Fact]
         public void SetOrCreateWithNullKeyThrowsArgumentNullException()
         {
-            var settings = new SettingsStorageProxy();
+            var settings = new ReactiveSettingsStorageProxy();
 
             Assert.Throws<ArgumentNullException>(() => settings.SetOrCreateProxy(42, null));
         }
